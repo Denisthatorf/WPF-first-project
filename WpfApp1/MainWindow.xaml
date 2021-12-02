@@ -1,0 +1,199 @@
+﻿<Window x:Class="WpfApp1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp1"
+         xmlns:int="clr-namespace:WpfApp1.Infrastructure"
+        xmlns:figures="clr-namespace:WpfApp1.FiguresOnCanvas"
+        mc:Ignorable="d"
+         Height="450" Width="800"
+        >
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="40"/>
+        </Style>
+        <int:FromListP_To_PCollectConverter x:Key="Point_ListToCollect"/>
+    </Window.Resources>
+
+    <Grid>
+
+        <Border BorderBrush="Black" 
+        BorderThickness="2" />
+        <!-- Buttons-->
+        <Grid>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="75"/>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Border Grid.ColumnSpan="5" BorderBrush="Black" 
+        BorderThickness="2" />
+            <Button x:Name="btn_Rectangle" Grid.Column="1" Click="btn_Rectangle_Click">
+                <StackPanel >
+                    <Rectangle Width="20" 
+                               Height="20" 
+                               StrokeThickness="1" Stroke="Black"/>
+                </StackPanel>
+            </Button>
+            <Button x:Name="btn_Ellipse" Grid.Column="2" Click="btn_Ellipse_Click">
+                <StackPanel>
+                    <Ellipse Width="20" 
+                             Height="20"
+                             StrokeThickness="1" Stroke="Black"/>
+                </StackPanel>
+            </Button>
+            <Button x:Name="Triengle" Grid.Column="3" Click="btn_Triengle_Click">
+                <StackPanel>
+                    <Polygon Points="10,0 20,20 0,20"
+                             StrokeThickness="1" Stroke="Black"/>
+                </StackPanel>
+            </Button>
+
+            <Menu Width="50" Grid.Column="4" Grid.Row="0"
+                        VerticalAlignment="Top" HorizontalAlignment="Right"
+                        Margin="0 15 100 0">
+
+                <MenuItem Header="File">
+                    <MenuItem Header="Save">
+                        <MenuItem Name="SaveBin" Header=".bin" Click="SaveBin_Click"/>
+                        <MenuItem Name="SaveXml" Header=".xml" Click="SaveXml_Click"/>
+                        <MenuItem Name="SaveJson" Header=".json" Click="SaveJson_Click"/>
+                    </MenuItem>
+
+                    <MenuItem Name="Open_SavedFile" Header="Open" Click="Open_SavedFile_Click"/>
+                </MenuItem>
+            </Menu>
+
+            <ComboBox x:Name="SelectedLanguage_Combox" SelectionChanged="ComboBox_SelectionChanged"
+                      Grid.Column="4" Grid.Row="0"
+                        VerticalAlignment="Top" HorizontalAlignment="Right"
+                        Margin="15">
+                <ComboBoxItem Content="en-US" IsSelected="True"/>
+                <ComboBoxItem Content="ru-RU"/>
+            </ComboBox>
+
+        </Grid>
+
+
+        <!-- TreeView and PbMain-->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="75"/>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+
+            <!-- <Canvas x:Name="PbMain" 
+                    Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2"/>-->
+            <ItemsControl x:Name="PbMain"  Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" >
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemContainerStyle>
+                    <Style TargetType="ContentPresenter">
+                        <Setter Property="Canvas.Left" Value="{Binding X}"/>
+                        <Setter Property="Canvas.Top" Value="{Binding Y}"/>
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+
+
+                <ItemsControl.Resources>
+                    <DataTemplate DataType="{x:Type figures:RectangleOnCanvas}" >
+                        <Rectangle Width="{Binding Width}" Height="{Binding Height}" 
+                                   Stroke="Black" StrokeThickness="1"
+                                   Fill="Aqua"/>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type figures:CircleOnCanvas}" >
+                        <Ellipse Width="{Binding Width}" Height="{Binding Height}"
+                                  Stroke="Black" StrokeThickness="1"
+                                 Fill="Aqua"/>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type figures:TriangleOnCanvas}">
+                        <Polygon
+                            Points="{Binding ListOfPoints, Converter={StaticResource Point_ListToCollect}}"
+                            Fill="Aqua"
+                            Stroke="Black"
+                            StrokeThickness="1"
+                            ></Polygon>
+                    </DataTemplate>
+                </ItemsControl.Resources>
+
+            </ItemsControl>
+            <Button x:Name="btnStop" Content="Stop" Width="100"
+                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Click="btnStop_Click"
+                    Visibility="Hidden"
+                   />
+            <!-- Visibility="{Binding Items, ElementName=TreeViewOfShapes, Converter= {StaticResource TreeView_Items_ToVisibility}}"-->
+
+           
+
+            
+
+            <!--<TreeView x:Name="TreeViewOfShapes" Grid.Column="0"  Grid.Row="1">
+                <TreeViewItem Header="Rectangle" x:Name="Rectangle"/>
+                <TreeViewItem Header="Circle" x:Name="Circle"/>
+                <TreeViewItem Header="Triangle" x:Name="Triangle"/>
+            </TreeView>-->
+
+            <TreeView Name="TreeViewOfShapes" Grid.Column="0"  Grid.Row="1" SelectedItemChanged="TreeViewOfShapes_SelectedItemChanged" >
+                <TreeViewItem Header="{DynamicResource Rectangle}" x:Name="Rectangle" >
+                    <TreeViewItem.Resources>
+                        <DataTemplate DataType="{x:Type figures:RectangleOnCanvas}">
+                            <StackPanel Orientation="Horizontal">
+                                <Rectangle Fill="Aqua" Width="10" Height="10" 
+                                           StrokeThickness="1" Stroke="Black"/>
+                                <TextBlock Text="{DynamicResource Rectangle}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </TreeViewItem.Resources>
+                </TreeViewItem>
+
+                <TreeViewItem Header="{DynamicResource Circle}" x:Name="Circle">
+                    <TreeViewItem.Resources>
+                        <DataTemplate DataType="{x:Type figures:CircleOnCanvas}" >
+                            <StackPanel Orientation="Horizontal">
+                                <Ellipse Fill="Aqua" Width="10" Height="10" 
+                                           StrokeThickness="1" Stroke="Black"/>
+                                <TextBlock Text="{DynamicResource Circle}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </TreeViewItem.Resources>
+                </TreeViewItem>
+
+                <TreeViewItem Header="{DynamicResource Triangle}" x:Name="Triangle">
+                    <TreeViewItem.Resources>
+                        <DataTemplate DataType="{x:Type figures:TriangleOnCanvas}" >
+                            <StackPanel Orientation="Horizontal">
+                                <Polygon Fill="Aqua" Points="6,0 12,12 0,12"
+                                           StrokeThickness="1" Stroke="Black"/>
+                                <TextBlock Text="{DynamicResource Triangle}"></TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </TreeViewItem.Resources>
+                </TreeViewItem>
+
+            </TreeView>
+        </Grid>
+    </Grid>
+</Window>
