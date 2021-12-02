@@ -5,6 +5,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization.Json;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Xml.Serialization;
 using WpfApp1.FiguresOnCanvas;
@@ -50,7 +52,11 @@ namespace WpfApp1
                 Y = PbMain.ActualHeight
             };
             foreach (var figure in FiguresOnCanvas)
+            {
                 figure.Move();
+            }
+               
+            
                 
         }
 

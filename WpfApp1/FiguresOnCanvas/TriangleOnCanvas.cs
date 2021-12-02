@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace WpfApp1.FiguresOnCanvas
 {
@@ -40,5 +41,14 @@ namespace WpfApp1.FiguresOnCanvas
                 };
         }
 
+        public override bool IsCollide(Figure figure)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void OnCollision(ref Figure figure)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

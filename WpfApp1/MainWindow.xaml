@@ -99,6 +99,7 @@
             </Grid.RowDefinitions>
 
 
+           
             <!-- <Canvas x:Name="PbMain" 
                     Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2"/>-->
             <ItemsControl x:Name="PbMain"  Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" >

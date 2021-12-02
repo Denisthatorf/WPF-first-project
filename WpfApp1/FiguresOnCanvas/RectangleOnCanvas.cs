@@ -24,5 +24,15 @@ namespace WpfApp1.FiguresOnCanvas
             FiguresRandomizer.FigureRandomizer.Hig_Wei_X_Y_pMax_Mar(ref height, ref width, ref x, ref y, pMax, MARGIN);
 
         }
+
+        public override bool IsCollide(Figure figure)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void OnCollision(ref Figure figure)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

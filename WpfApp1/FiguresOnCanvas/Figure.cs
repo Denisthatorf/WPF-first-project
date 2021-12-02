@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Windows;
@@ -49,7 +50,13 @@ namespace WpfApp1.FiguresOnCanvas
         protected double x;
         [DataMember]
         protected double y;
+        [DataMember]
+        private double _mass;
+        [NonSerialized]
+        protected Vector2 Velocity;
 
+
+        public double Mass { get => _mass; set { _mass = value; OnPropertyChanged(); } }
         public double Width { get => width; set { width = value; OnPropertyChanged(); } }
         public double Height { get => height; set { height = value; OnPropertyChanged(); } }
         public double X { get => x; set { x = value; OnPropertyChanged(); } }
@@ -63,9 +70,14 @@ namespace WpfApp1.FiguresOnCanvas
             //vector speed (-10...10 ; -10...10)
             dX = random.NextDouble() * 20 - 10;
             dY = random.NextDouble() * 20 - 10;
+            Velocity.X = (float)dX;
+            Velocity.Y = (float)dY;
+
         }
 
         public abstract void InitiolizeShape();
+        public abstract bool IsCollide(Figure figure);
+        public abstract void OnCollision(ref Figure figure);
         public virtual void Move()
         {
             if (IsMoving)
@@ -76,22 +88,28 @@ namespace WpfApp1.FiguresOnCanvas
                 {
                     // dX = dX;
                     dY = -dY;
+                    Velocity.Y = -Velocity.Y;
                 }
 
                 //Collision with left and right
                 if (X + Width + MARGIN > pMax.X
                          || X - MARGIN < 0)
                 {
-                    dX = -dX;
+                    //dX = -dX;
+                    Velocity.X = -Velocity.X;
                     //dY = dY;
                 }
 
-                /* Canvas.SetLeft(ClassShape, Canvas.GetLeft(ClassShape) + dX);
-                 Canvas.SetTop(ClassShape, Canvas.GetTop(ClassShape) + dY);*/
-
-                X += dX;
-                Y += dY;
+                X += Velocity.X;
+                Y += Velocity.Y;
             }
+        }
+
+        [OnDeserialized()]
+        protected virtual void DesesializedFunc()
+        {
+            Velocity.X = (float)dX;
+            Velocity.Y = (float)dY;
         }
     }
 }
