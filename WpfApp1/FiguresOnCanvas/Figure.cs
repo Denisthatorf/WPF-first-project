@@ -106,7 +106,7 @@ namespace WpfApp1.FiguresOnCanvas
         }
 
         [OnDeserialized()]
-        protected virtual void DesesializedFunc()
+        protected void DesesializedFunc(StreamingContext context)
         {
             Velocity.X = (float)dX;
             Velocity.Y = (float)dY;

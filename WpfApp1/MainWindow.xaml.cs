@@ -51,7 +51,8 @@ namespace WpfApp1
                 X = PbMain.ActualWidth,
                 Y = PbMain.ActualHeight
             };
-            foreach (var figure in FiguresOnCanvas)
+            foreach (
+                var figure in FiguresOnCanvas)
             {
                 figure.Move();
             }
@@ -210,6 +211,21 @@ namespace WpfApp1
 
         }
 
-        
+        private void PlusSound(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void MinusSound(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void AddDataOnConsole(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void RemoveDataFromConsole(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
