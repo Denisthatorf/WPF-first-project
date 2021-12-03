@@ -2,6 +2,7 @@
 using System;
 using System.Numerics;
 using System.Runtime.Serialization;
+using System.Windows;
 using System.Windows.Shapes;
 
 namespace WpfApp1.FiguresOnCanvas
@@ -10,7 +11,7 @@ namespace WpfApp1.FiguresOnCanvas
     [DataContract]
     public class CircleOnCanvas : Figure
     {
-       
+
         public CircleOnCanvas() : base()
         {
         }
@@ -22,28 +23,19 @@ namespace WpfApp1.FiguresOnCanvas
             Y = random.NextDouble() * (pMax.Y - Height - MARGIN) + MARGIN;*/
             FiguresRandomizer.FigureRandomizer.Hig_Wei_X_Y_pMax_Mar(ref height, ref width, ref x, ref y, pMax, MARGIN);
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="figure"></param>
-        /// <param name=""></param>
-        /// <returns></returns>
-
         public override bool IsCollide(Figure figure)
         {
-            if (figure is CircleOnCanvas)
+            if (figure is CircleOnCanvas &&
+                figure!=this)
             {
                 double r = this.Width + figure.Width;
                 r *= r;
-                return r < Math.Pow(this.X + figure.X, 2) + Math.Pow(this.Y + figure.Y, 2);
+                return r > Math.Pow(this.X - figure.X, 2) + Math.Pow(this.Y- figure.Y, 2) +2;
             }
-            else
-            return false;
-           
+            else { return false; }
         }
 
-        public override void OnCollision(ref Figure figure)
+        public override void OnCollision(Figure figure)
         {
             if (IsCollide(figure))
             {
@@ -53,8 +45,8 @@ namespace WpfApp1.FiguresOnCanvas
                 // Вычисляем относительную скорость
                 Vector2 rv = B.Velocity - A.Velocity;
 
-                 // Вычисляем относительную скорость относительно направления нормали
-               // float velAlongNormal = DotProduct(rv, normal)
+                //Вычисляем относительную скорость относительно направления нормали
+               //float velAlongNormal = DotProduct(rv, normal)
 
                  // Не выполняем вычислений, если скорости разделены
               //  if (velAlongNormal > 0)
@@ -68,8 +60,8 @@ namespace WpfApp1.FiguresOnCanvas
                // j /= 1 / A.mass + 1 / B.mass
 
   // Прикладываем импульс силы
-                A.Velocity.X = -A.Velocity.X;
-                A.Velocity.Y = -A.Velocity.Y;
+                A.Velocity.X = -A.Velocity.X ;
+                A.Velocity.Y = -A.Velocity.Y ;
                 B.Velocity.X = -B.Velocity.X;
                 B.Velocity.Y = -B.Velocity.Y;
 

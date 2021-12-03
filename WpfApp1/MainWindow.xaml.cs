@@ -51,9 +51,12 @@ namespace WpfApp1
                 X = PbMain.ActualWidth,
                 Y = PbMain.ActualHeight
             };
-            foreach (
-                var figure in FiguresOnCanvas)
+            foreach (var figure in FiguresOnCanvas)
             {
+                foreach (var figure2 in FiguresOnCanvas)
+                {
+                        figure.OnCollision(figure2);
+                }
                 figure.Move();
             }
                

@@ -30,7 +30,7 @@ namespace WpfApp1.FiguresOnCanvas
             throw new NotImplementedException();
         }
 
-        public override void OnCollision(ref Figure figure)
+        public override void OnCollision(Figure figure)
         {
             throw new NotImplementedException();
         }

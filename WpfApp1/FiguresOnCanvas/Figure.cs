@@ -4,6 +4,7 @@ using System.Numerics;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Windows;
+using System.Windows.Shapes;
 using System.Xml.Serialization;
 using WpfApp1.Infrastructure;
 
@@ -54,8 +55,10 @@ namespace WpfApp1.FiguresOnCanvas
         private double _mass;
         [NonSerialized]
         protected Vector2 Velocity;
+        [NonSerialized]
+        protected Shape _classShape;
 
-
+        public Shape ClassShape {get { return _classShape; } set { _classShape = value; }}
         public double Mass { get => _mass; set { _mass = value; OnPropertyChanged(); } }
         public double Width { get => width; set { width = value; OnPropertyChanged(); } }
         public double Height { get => height; set { height = value; OnPropertyChanged(); } }
@@ -68,8 +71,8 @@ namespace WpfApp1.FiguresOnCanvas
             InitiolizeShape();
 
             //vector speed (-10...10 ; -10...10)
-            dX = random.NextDouble() * 20 - 10;
-            dY = random.NextDouble() * 20 - 10;
+            dX = random.NextDouble() * 5 - 1;
+            dY = random.NextDouble() * 5 - 1;
             Velocity.X = (float)dX;
             Velocity.Y = (float)dY;
 
@@ -77,7 +80,7 @@ namespace WpfApp1.FiguresOnCanvas
 
         public abstract void InitiolizeShape();
         public abstract bool IsCollide(Figure figure);
-        public abstract void OnCollision(ref Figure figure);
+        public abstract void OnCollision(Figure figure);
         public virtual void Move()
         {
             if (IsMoving)
