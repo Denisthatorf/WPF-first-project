@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using System.Runtime.Serialization;
 using System.Windows.Shapes;
 
@@ -10,29 +11,29 @@ namespace WpfApp1.FiguresOnCanvas
     {
         public RectangleOnCanvas() : base()
         {
-        }
-
-
-        public override void InitiolizeShape()
-        {
-             
-           /* Width= Height = random.NextDouble() * 20 + 10;
-
-            X = random.NextDouble() * (pMax.X - Width - MARGIN) + MARGIN;
-            Y = random.NextDouble() * (pMax.Y - Height - MARGIN) + MARGIN;*/
-
-            FiguresRandomizer.FigureRandomizer.Hig_Wei_X_Y_pMax_Mar(ref height, ref width, ref x, ref y, pMax, MARGIN);
-
+            Radius = Width / 2 * Math.Sqrt(2);
         }
 
         public override bool IsCollide(Figure figure)
         {
-            throw new NotImplementedException();
+            if (this.X + Width < figure.X || this.X > figure.X + Width) return false;
+            if (this.Y + Width < figure.Y || this.Y > figure.Y + Height) return false;
+
+            return true;
         }
 
         public override void OnCollision(Figure figure)
         {
-            throw new NotImplementedException();
+            if (figure is RectangleOnCanvas &&
+                figure != this)
+            {
+                var value = figure.Velocity;
+
+                float invLen = 1f / MathF.Sqrt(value.X * value.X + value.Y * value.Y);
+                var normal = new Vector2(value.X * invLen, value.Y * invLen);
+                Velocity = normal;
+                figure.Velocity = -normal;
+            }
         }
     }
 }

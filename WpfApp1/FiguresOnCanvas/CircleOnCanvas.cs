@@ -2,6 +2,7 @@
 using System;
 using System.Numerics;
 using System.Runtime.Serialization;
+using System.Threading;
 using System.Windows;
 using System.Windows.Shapes;
 
@@ -14,61 +15,52 @@ namespace WpfApp1.FiguresOnCanvas
 
         public CircleOnCanvas() : base()
         {
+            Radius = Width / 2;
         }
 
-        public override void InitiolizeShape()
-        {
-            /*Width = Height = random.NextDouble() * 30 + 10;
-            X = random.NextDouble() * (pMax.X - Height - MARGIN) + MARGIN;
-            Y = random.NextDouble() * (pMax.Y - Height - MARGIN) + MARGIN;*/
-            FiguresRandomizer.FigureRandomizer.Hig_Wei_X_Y_pMax_Mar(ref height, ref width, ref x, ref y, pMax, MARGIN);
-        }
         public override bool IsCollide(Figure figure)
         {
             if (figure is CircleOnCanvas &&
                 figure!=this)
             {
-                double r = this.Width + figure.Width;
+                double r = this.Radius + figure.Radius;
                 r *= r;
-                return r > Math.Pow(this.X - figure.X, 2) + Math.Pow(this.Y- figure.Y, 2) +2;
+                return r + 1 > Math.Pow(this.CentreX - figure.CentreX, 2) + Math.Pow(this.CentreY - figure.CentreY, 2) ;
             }
             else { return false; }
         }
 
         public override void OnCollision(Figure figure)
         {
-            if (IsCollide(figure))
-            {
-                var A = this;
-                var B = figure as CircleOnCanvas;
+            var value = figure.Velocity;
+            var rv = this.Velocity - figure.Velocity;
+            float invLen = 1f / MathF.Sqrt(value.X * value.X + value.Y * value.Y);
+            var normal = new Vector2(value.X * invLen, value.Y * invLen);
 
-                // Вычисляем относительную скорость
-                Vector2 rv = B.Velocity - A.Velocity;
+            Velocity = normal;
+            figure.Velocity = -normal;
 
-                //Вычисляем относительную скорость относительно направления нормали
-               //float velAlongNormal = DotProduct(rv, normal)
+            // Calculate relative velocity
+            /*
+                        Vector2 rv = this.Velocity - figure.Velocity;
 
-                 // Не выполняем вычислений, если скорости разделены
-              //  if (velAlongNormal > 0)
-               //     return;
+                        float velAlongNormal = this.Velocity.X*figure.Velocity.X + this.Velocity.Y*figure.Velocity.Y;
 
-                // Вычисляем упругость
-               // float e = min(A.restitution, B.restitution)
+                        if (velAlongNormal > 0)
+                            return;
 
-               // Вычисляем скаляр импульса силы
-                //float j = -(1 + e) * velAlongNormal
-               // j /= 1 / A.mass + 1 / B.mass
+                        //float e = min(A.restitution, B.restitution);
+                        float j = - velAlongNormal;
+                        // j /= 1 / this.Mass + 1 / figure.Mass;
+                        // Apply impulse
+                        float invLen = 1f / MathF.Sqrt((float)(this.X * this.X + this.Y * this.Y));
+                        var normal = new Vector2(this.Velocity.X * invLen, figure.Velocity.Y * invLen);
+                        Vector2 impulse = j * normal;
+                        this.Velocity -= impulse;
+                        figure.Velocity += impulse;
+            */
 
-  // Прикладываем импульс силы
-                A.Velocity.X = -A.Velocity.X ;
-                A.Velocity.Y = -A.Velocity.Y ;
-                B.Velocity.X = -B.Velocity.X;
-                B.Velocity.Y = -B.Velocity.Y;
 
-               // Vector2 impulse = j * normal;
-               //A.velocity -= 1 / A.mass * impulse
-               // B.velocity += 1 / B.mass * impulse
-            }
         }
     }
 }

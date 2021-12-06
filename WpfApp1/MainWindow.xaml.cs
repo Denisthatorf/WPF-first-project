@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Media;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization.Json;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -21,8 +23,6 @@ namespace WpfApp1
     {
         List<Figure> FiguresOnCanvas;
 
-        Random random = new Random();
-
         public MainWindow()
         {
             InitializeComponent();
@@ -30,7 +30,6 @@ namespace WpfApp1
             timer.Interval = TimeSpan.FromMilliseconds(20);
             timer.Tick += timerRefresh;
             timer.Start();
-
 
             FiguresOnCanvas = new List<Figure>();
 
@@ -45,7 +44,7 @@ namespace WpfApp1
 
         void timerRefresh(object sender, EventArgs e)
         {
-
+           
             Figure.pMax = new Point()
             {
                 X = PbMain.ActualWidth,
@@ -55,13 +54,17 @@ namespace WpfApp1
             {
                 foreach (var figure2 in FiguresOnCanvas)
                 {
+                    if (figure.IsCollide(figure2))
+                    {
                         figure.OnCollision(figure2);
+                    }
                 }
                 figure.Move();
             }
-               
-            
-                
+
+
+
+
         }
 
         #region Btns that create figures

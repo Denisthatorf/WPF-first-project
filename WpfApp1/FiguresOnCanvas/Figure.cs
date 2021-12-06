@@ -4,6 +4,7 @@ using System.Numerics;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Xml.Serialization;
 using WpfApp1.Infrastructure;
@@ -24,9 +25,9 @@ namespace WpfApp1.FiguresOnCanvas
     {
 
         #region Properties and fields
+        
         [NonSerialized]
         static protected Random random = new Random();
-
         [NonSerialized]
         static protected Point CurentWindowCurentXY;
         static public Point pMax
@@ -38,49 +39,56 @@ namespace WpfApp1.FiguresOnCanvas
         static protected readonly double MARGIN = 10;
 
         [DataMember]
+        protected double width;
+        [DataMember]
+        protected double height;
+        [DataMember]
+        protected double mass;
+        [DataMember]
+        protected double radius;
+
+
+        [DataMember]
         public bool IsMoving = true;
         [DataMember]
         protected double dY;
         [DataMember]
         protected double dX;
         [DataMember]
-        protected double width;
-        [DataMember]
-        protected double height;
-        [DataMember]
         protected double x;
         [DataMember]
         protected double y;
-        [DataMember]
-        private double _mass;
         [NonSerialized]
-        protected Vector2 Velocity;
-        [NonSerialized]
-        protected Shape _classShape;
+        public Vector2 Velocity;
 
-        public Shape ClassShape {get { return _classShape; } set { _classShape = value; }}
-        public double Mass { get => _mass; set { _mass = value; OnPropertyChanged(); } }
-        public double Width { get => width; set { width = value; OnPropertyChanged(); } }
-        public double Height { get => height; set { height = value; OnPropertyChanged(); } }
+
         public double X { get => x; set { x = value; OnPropertyChanged(); } }
         public double Y { get => y; set { y = value; OnPropertyChanged(); } }
+        public double CentreX { get { return X + Radius; } }
+        public double CentreY { get { return Y + Radius; } }
+
+        public double Width { get => width; set => width = value; }
+        public double Height { get => height; set => height = value; }
+        public double Mass { get => mass; set => mass = value; }
+        public double Radius { get => radius; set => radius = value; }
+
         #endregion
 
         public Figure()
-        {
-            InitiolizeShape();
-
-            //vector speed (-10...10 ; -10...10)
-            dX = random.NextDouble() * 5 - 1;
-            dY = random.NextDouble() * 5 - 1;
+        { 
+            dX = random.NextDouble() * 20 - 10;
+            dY = random.NextDouble() * 20 - 10;
             Velocity.X = (float)dX;
             Velocity.Y = (float)dY;
 
+            FiguresRandomizer.FigureRandomizer.Hig_Wei_X_Y_pMax_Mar(ref height, ref width, ref x, ref y, pMax, MARGIN);        
         }
 
-        public abstract void InitiolizeShape();
+
         public abstract bool IsCollide(Figure figure);
         public abstract void OnCollision(Figure figure);
+
+
         public virtual void Move()
         {
             if (IsMoving)
@@ -107,6 +115,12 @@ namespace WpfApp1.FiguresOnCanvas
                 Y += Velocity.Y;
             }
         }
+        public virtual void Move(Vector2 vector)
+        {
+            X += vector.X;
+            Y += vector.Y;
+        }
+
 
         [OnDeserialized()]
         protected void DesesializedFunc(StreamingContext context)
@@ -114,5 +128,8 @@ namespace WpfApp1.FiguresOnCanvas
             Velocity.X = (float)dX;
             Velocity.Y = (float)dY;
         }
+
+
+
     }
 }

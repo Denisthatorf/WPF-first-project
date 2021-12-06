@@ -24,17 +24,9 @@ namespace WpfApp1.FiguresOnCanvas
         }
         public TriangleOnCanvas() : base()
         {
-        }
+            Radius = Width / Math.Sqrt(3);
+            double Modifire = Width/2;
 
-        public override void InitiolizeShape()
-        {
-            double Modifire = random.NextDouble() * 20 + 10;
-
-            X = random.NextDouble() * (pMax.X - Height - MARGIN) + MARGIN;
-            Y = random.NextDouble() * (pMax.Y - Height - MARGIN) + MARGIN;
-
-
-            Height = Width = Modifire * 2;
             ListOfPoints = new List<Point>
                 {
                     new Point { X = 1 * Modifire , Y = 0},
@@ -154,7 +146,6 @@ namespace WpfApp1.FiguresOnCanvas
                 B.Velocity.Y = -B.Velocity.Y;
             }
         }
-
 
     }
 }
