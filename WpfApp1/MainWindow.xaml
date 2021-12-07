@@ -25,7 +25,6 @@
     </Window.Resources>
 
     <Grid>
-
         <Border BorderBrush="Black" 
         BorderThickness="2" />
         <!-- Buttons-->
@@ -207,6 +206,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition></RowDefinition>
                     <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
@@ -216,7 +216,7 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBox Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" 
-                           TextAlignment="Center" Text="{DynamicResource Data}"
+                           TextAlignment="Center" Text="{DynamicResource Sound}"
                            Margin="10"></TextBox>
                 <Button Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" 
                          Style="{StaticResource PlusMinusButton}" Click="PlusSound">
@@ -226,9 +226,7 @@
                         Style="{StaticResource PlusMinusButton}" Click="MinusSound">
                     <Image Source="Images\PlusSign.png"/>
                 </Button>
-
-
-                <TextBox Grid.Column="0" Grid.Row="1" Text="{DynamicResource Sound}"
+                <TextBox Grid.Column="0" Grid.Row="1" Text="{DynamicResource Data}"
                              Margin="10" TextAlignment="Center"></TextBox>
                 <Button Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" 
                          Style="{StaticResource PlusMinusButton}" Click="AddDataOnConsole">
@@ -239,6 +237,10 @@
                     <Image Source="Images\PlusSign.png"/>
                 </Button>
 
+
+                <TextBox Grid.Row="2" Grid.ColumnSpan="4"
+                         x:Name="ConsoleBox" Height="100"
+                         BorderBrush="Black" BorderThickness="1"></TextBox>
             </Grid>
 
         </Grid>

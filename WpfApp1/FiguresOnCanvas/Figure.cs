@@ -74,6 +74,33 @@ namespace WpfApp1.FiguresOnCanvas
 
         #endregion
 
+        public event EventHandler<CollisionEventArgs> Collision;
+
+        //Problems could appear
+        protected virtual void OnCollision(CollisionEventArgs e)
+        {
+            //_ = e ?? throw new ArgumentNullException(nameof(e));
+
+            // Вариант 1
+            // Может быть уязвимость при многопоточности
+            //NewMail?.Invoke(this, e);
+
+            // Вариант 2
+            // Решает проблему, но поведение компилятора может измениться
+           var temp = Collision;
+           temp?.Invoke(this, e);
+
+            // Сохранить ссылку на делегата во временной переменной
+            // для обеспечения безопасности потоков
+            //Volatile.Read(ref NewMail)?.Invoke(this, e);
+        }
+
+        public void SimulateNewCollision(Figure figure, Point ContactP)
+        {
+            var e = new CollisionEventArgs(figure, ContactP);
+            OnCollision(e);
+        }
+
         public Figure()
         { 
             dX = random.NextDouble() * 2 - 0.5;
@@ -81,17 +108,19 @@ namespace WpfApp1.FiguresOnCanvas
             Velocity.X = (float)dX;
             Velocity.Y = (float)dY;
 
-            FiguresRandomizer.FigureRandomizer.Hig_Wei_X_Y_pMax_Mar(ref height, ref width, ref x, ref y, pMax, MARGIN);        
+            FiguresRandomizer.FigureRandomizer.Hig_Wei_X_Y_pMax_Mar(ref height, ref width, ref x, ref y, pMax, MARGIN);
+
+            Collision += Repulsion;
         }
 
-
         public abstract bool IsCollide(Figure figure);
-        public virtual void OnCollision(Figure figure)
+        public virtual void Repulsion(object sender, CollisionEventArgs e)
         {
             #region Link on documentation
             //https://www.vobarian.com/collisions/2dcollisions2.pdf
             #endregion
 
+            var figure = e.figure;
 
             //formula of normal
             var n = new Vector2(

@@ -22,6 +22,7 @@ namespace WpfApp1
     public partial class MainWindow : Window
     {
         List<Figure> FiguresOnCanvas;
+        MediaPlayer mplayer = new MediaPlayer();
 
         public MainWindow()
         {
@@ -56,15 +57,11 @@ namespace WpfApp1
                 {
                     if (figure.IsCollide(figure2))
                     {
-                        figure.OnCollision(figure2);
+                        figure.SimulateNewCollision(figure2, new Point());
                     }
                 }
                 figure.Move();
             }
-
-
-
-
         }
 
         #region Btns that create figures
@@ -217,14 +214,23 @@ namespace WpfApp1
 
         }
 
+        #region Beep
+
         private void PlusSound(object sender, RoutedEventArgs e)
         {
-
+            (TreeViewOfShapes.SelectedItem as Figure).Collision += Beep;
         }
         private void MinusSound(object sender, RoutedEventArgs e)
         {
-
+            (TreeViewOfShapes.SelectedItem as Figure).Collision -= Beep;
         }
+        public void Beep (object sender, CollisionEventArgs e)
+        {
+            mplayer.Open(new Uri(@"C:\C#\WPF_Trainee\First_\WpfApp1\WpfApp1\Sounds\BeepSound.mp3"));
+            mplayer.Play();
+        }
+        #endregion
+        #region Console
         private void AddDataOnConsole(object sender, RoutedEventArgs e)
         {
 
@@ -233,5 +239,7 @@ namespace WpfApp1
         {
 
         }
+        #endregion
+
     }
 }
