@@ -6,13 +6,11 @@ namespace WpfApp1.Infrastructure
 {
     public class CollisionEventArgs: EventArgs
     {
-        public Type Type1 { get; }
-        public Type Type2 { get; }
+        public double CollisionPoint;
 
-        public CollisionEventArgs(Type type1, Type type2)
+        public CollisionEventArgs(double _collisionPoint)
         {
-            Type1 = type1;
-            Type2 = type2;
+            CollisionPoint = _collisionPoint;
         }
         public override string ToString()
         {

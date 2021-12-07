@@ -76,8 +76,8 @@ namespace WpfApp1.FiguresOnCanvas
 
         public Figure()
         { 
-            dX = random.NextDouble() * 20 - 10;
-            dY = random.NextDouble() * 20 - 10;
+            dX = random.NextDouble() * 2 - 0.5;
+            dY = random.NextDouble() * 2 - 0.5;
             Velocity.X = (float)dX;
             Velocity.Y = (float)dY;
 

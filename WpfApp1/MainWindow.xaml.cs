@@ -27,7 +27,7 @@ namespace WpfApp1
         {
             InitializeComponent();
             DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromMilliseconds(20);
+            timer.Interval = TimeSpan.FromMilliseconds(10);
             timer.Tick += timerRefresh;
             timer.Start();
 

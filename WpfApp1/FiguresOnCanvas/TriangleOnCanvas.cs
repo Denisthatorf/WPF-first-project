@@ -36,6 +36,10 @@ namespace WpfApp1.FiguresOnCanvas
         }
         public override bool IsCollide(Figure figure)
         {
+
+            if (this.X + Width < figure.X || this.X > figure.X + Width) return false;
+            if (this.Y + Width < figure.Y || this.Y > figure.Y + Height) return false;
+
             throw new NotImplementedException();
         }
         #region
