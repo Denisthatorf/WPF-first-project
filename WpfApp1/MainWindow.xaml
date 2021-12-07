@@ -69,14 +69,14 @@
                         VerticalAlignment="Top" HorizontalAlignment="Right"
                         Margin="0 15 100 0">
 
-                <MenuItem Header="File">
-                    <MenuItem Header="Save">
+                <MenuItem Header="{DynamicResource File}">
+                    <MenuItem Header="{DynamicResource Save}">
                         <MenuItem Name="SaveBin" Header=".bin" Click="SaveBin_Click"/>
                         <MenuItem Name="SaveXml" Header=".xml" Click="SaveXml_Click"/>
                         <MenuItem Name="SaveJson" Header=".json" Click="SaveJson_Click"/>
                     </MenuItem>
 
-                    <MenuItem Name="Open_SavedFile" Header="Open" Click="Open_SavedFile_Click"/>
+                    <MenuItem Name="Open_SavedFile" Header="{DynamicResource Open}" Click="Open_SavedFile_Click"/>
                 </MenuItem>
             </Menu>
 
@@ -216,8 +216,8 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBox Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" 
-                           TextAlignment="Center"
-                           Margin="10">Sound</TextBox>
+                           TextAlignment="Center" Text="{DynamicResource Data}"
+                           Margin="10"></TextBox>
                 <Button Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" 
                          Style="{StaticResource PlusMinusButton}" Click="PlusSound">
                         <Image Source="Images\MinusSign.png"/>
@@ -227,9 +227,9 @@
                     <Image Source="Images\PlusSign.png"/>
                 </Button>
 
-                
-                <TextBox Grid.Column="0" Grid.Row="1"
-                             Margin="10" TextAlignment="Center">On Console</TextBox>
+
+                <TextBox Grid.Column="0" Grid.Row="1" Text="{DynamicResource Sound}"
+                             Margin="10" TextAlignment="Center"></TextBox>
                 <Button Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" 
                          Style="{StaticResource PlusMinusButton}" Click="AddDataOnConsole">
                     <Image Source="Images\MinusSign.png"/>

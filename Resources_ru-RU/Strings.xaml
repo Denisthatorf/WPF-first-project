@@ -9,5 +9,11 @@
     <system:String x:Key="Stop">Стоп</system:String>
     <system:String x:Key="Start">Старт</system:String>
 
+    <system:String x:Key="File">Файл</system:String>
+    <system:String x:Key="Open">Открыть</system:String>
+    <system:String x:Key="Save">Сохранить</system:String>
+
+    <system:String x:Key="Data">Данные</system:String>
+    <system:String x:Key="Sound">Звук </system:String>
 
 </ResourceDictionary>
