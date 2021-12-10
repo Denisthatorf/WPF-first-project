@@ -60,7 +60,16 @@ namespace WpfApp1
                         figure.SimulateNewCollision(figure2, new Point());
                     }
                 }
-                figure.Move();
+
+                try
+                {
+
+                    figure.Move();
+                }
+                catch (FigureOutOfBoundExeption ex)
+                {
+                    figure.Move(new System.Numerics.Vector2(ex.dX, ex.dY));
+                }
             }
         }
 

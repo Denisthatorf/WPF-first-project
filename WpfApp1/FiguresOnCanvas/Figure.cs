@@ -103,8 +103,8 @@ namespace WpfApp1.FiguresOnCanvas
 
         public Figure()
         { 
-            dX = random.NextDouble() * 2 - 0.5;
-            dY = random.NextDouble() * 2 - 0.5;
+            dX = random.NextDouble() * 5 - 2;
+            dY = random.NextDouble() * 5 - 2;
             Velocity.X = (float)dX;
             Velocity.Y = (float)dY;
 
@@ -159,14 +159,31 @@ namespace WpfApp1.FiguresOnCanvas
 
         public virtual void Move()
         {
+            if (Y + Height > pMax.Y)
+            {
+                var ex = new FigureOutOfBoundExeption();
+                ex.dX = 0;
+                ex.dY = (float)(CurentWindowCurentXY.Y - Y - Height - MARGIN * 2);
+                throw ex;
+            }
+
+            if (X + Width > pMax.X)
+            {
+                var ex = new FigureOutOfBoundExeption();
+                ex.dX =(float)(CurentWindowCurentXY.X - X - Width - MARGIN *2);
+                ex.dY = 0;
+                throw ex;
+            }
+
+
+
             if (IsMoving)
             {
+
                 //Collision with top and bottom
                 if (Y + Height + MARGIN > pMax.Y
                           || Y < MARGIN)
                 {
-                    // dX = dX;
-                    dY = -dY;
                     Velocity.Y = -Velocity.Y;
                 }
 
@@ -174,10 +191,10 @@ namespace WpfApp1.FiguresOnCanvas
                 if (X + Width + MARGIN > pMax.X
                          || X - MARGIN < 0)
                 {
-                    //dX = -dX;
                     Velocity.X = -Velocity.X;
-                    //dY = dY;
                 }
+
+               
 
                 X += Velocity.X;
                 Y += Velocity.Y;
