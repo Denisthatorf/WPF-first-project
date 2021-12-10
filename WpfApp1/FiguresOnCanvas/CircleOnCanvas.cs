@@ -31,5 +31,10 @@ namespace WpfApp1.FiguresOnCanvas
             r *= r;
             return r + 1 > Math.Pow(this.CentreX - figure.CentreX, 2) + Math.Pow(this.CentreY - figure.CentreY, 2);
         }
+
+        public override Point PointOfCollision(Figure figure)
+        {
+            return new Point( (this.CentreX + figure.CentreX)/2, (this.CentreY + figure.CentreY) / 2);
+        }
     }
 }

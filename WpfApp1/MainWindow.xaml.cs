@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Media;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization.Json;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -23,14 +26,21 @@ namespace WpfApp1
     {
         List<Figure> FiguresOnCanvas;
         MediaPlayer mplayer = new MediaPlayer();
-
+       // Thread SecondThread;
+              
+       
         public MainWindow()
         {
             InitializeComponent();
+
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromMilliseconds(10);
             timer.Tick += timerRefresh;
             timer.Start();
+
+          //  SecondThread = new Thread(DrowFigure);
+          //  SecondThread.Start();
+
 
             FiguresOnCanvas = new List<Figure>();
 
@@ -45,7 +55,7 @@ namespace WpfApp1
 
         void timerRefresh(object sender, EventArgs e)
         {
-           
+            DrowFigure();
             Figure.pMax = new Point()
             {
                 X = PbMain.ActualWidth,
@@ -57,21 +67,34 @@ namespace WpfApp1
                 {
                     if (figure.IsCollide(figure2))
                     {
-                        figure.SimulateNewCollision(figure2, new Point());
+                        figure.SimulateNewCollision(figure2, figure.PointOfCollision(figure2));
                     }
                 }
 
                 try
                 {
-
                     figure.Move();
                 }
                 catch (FigureOutOfBoundExeption ex)
                 {
-                    figure.Move(new System.Numerics.Vector2(ex.dX, ex.dY));
-                }
+                    figure.Move(new System.Numerics.Vector2(ex.dX, ex.dY));                }
+                PbMain.Items.Remove(figure);
             }
         }
+
+        void DrowFigure()
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                foreach (var figure in FiguresOnCanvas)
+                {
+                    PbMain.Items.Add(figure);
+                }
+
+            });
+            
+        }
+
 
         #region Btns that create figures
         private void btn_Triengle_Click(object sender, RoutedEventArgs e)
@@ -145,6 +168,7 @@ namespace WpfApp1
             Localize.LoadStringResource(language);
         }
 
+        #region Desirialization
         private void SaveBin_Click(object sender, RoutedEventArgs e)
         {
             var binFormatter = new BinaryFormatter();
@@ -180,18 +204,18 @@ namespace WpfApp1
             }
             #region xmlOpenComments
 
-         /*   using (var file = new FileStream("figures.xml", FileMode.OpenOrCreate))
-            {
+            /*   using (var file = new FileStream("figures.xml", FileMode.OpenOrCreate))
+               {
 
-                FiguresOnCanvas = xml.Deserialize(file) as List<Figure>;
-                PbMain.Items.Clear();
+                   FiguresOnCanvas = xml.Deserialize(file) as List<Figure>;
+                   PbMain.Items.Clear();
 
-                foreach (var item in FiguresOnCanvas)
-                {
-                    PbMain.Items.Add(item);
-                }
+                   foreach (var item in FiguresOnCanvas)
+                   {
+                       PbMain.Items.Add(item);
+                   }
 
-            }*/
+               }*/
             #endregion
         }
         private void SaveJson_Click(object sender, RoutedEventArgs e)
@@ -222,6 +246,8 @@ namespace WpfApp1
             }
 
         }
+        #endregion
+
 
         #region Beep
 
@@ -242,12 +268,43 @@ namespace WpfApp1
         #region Console
         private void AddDataOnConsole(object sender, RoutedEventArgs e)
         {
-
+            (TreeViewOfShapes.SelectedItem as Figure).Collision += ConsoleOutput;
         }
         private void RemoveDataFromConsole(object sender, RoutedEventArgs e)
         {
+            (TreeViewOfShapes.SelectedItem as Figure).Collision -= ConsoleOutput;
+        }
+        public void ConsoleOutput(object sender, CollisionEventArgs e)
+        {
+            string text = string.Empty;
+            string[] lines = ConsoleBox.Text.Split('\n');
+
+            if (lines.Length > 6)
+            {
+                for (int i = 1; i < 6; i++)
+                {
+                    text += lines[i];
+                    text += "\n";
+                }
+            }
+            else {
+                foreach (var line in lines)
+                {
+                    text += line;
+                    text += "\n";
+                }
+            }
+
+            text += $"({e.CollisionPoint.X:#.##};{e.CollisionPoint.Y:#.##})";
+            ConsoleBox.Text = text;
+
+           
+
 
         }
+
+
+
         #endregion
 
     }

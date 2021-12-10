@@ -107,10 +107,10 @@
         BorderThickness="1" />
 
             <!-- <Canvas />-->
-            <ItemsControl x:Name="PbMain"  Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2"  Grid.RowSpan="2">
+            <ItemsControl x:Name="PbMain" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2"  Grid.RowSpan="2">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <Canvas/>
+                        <Canvas x:Name="Canvas" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemContainerStyle>
@@ -227,7 +227,7 @@
                     <Image Source="Images\MinusSign.png"></Image>
                 </Button>
                 
-                <!--
+                
                 <TextBox Grid.Column="0" Grid.Row="1" Text="{DynamicResource Data}"
                              Margin="10" TextAlignment="Center"></TextBox>
                 <Button Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" 
@@ -238,13 +238,14 @@
                         Style="{StaticResource PlusMinusButton}" Click="RemoveDataFromConsole">
                     <Image Source="Images\PlusSign.png"/>
                 </Button>
-                
-                
-                 <TextBox Grid.Row="2" Grid.ColumnSpan="4"
-                         x:Name="ConsoleBox" Height="100"
-                         BorderBrush="Black" BorderThickness="1"></TextBox>-->
 
-               
+
+                <TextBox Grid.Row="2" Grid.ColumnSpan="4"
+                         x:Name="ConsoleBox" Height="100"
+                         BorderBrush="Black" BorderThickness="1"
+                         IsReadOnly="True"></TextBox>
+
+
             </Grid>
 
         </Grid>

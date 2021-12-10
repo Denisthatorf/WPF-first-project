@@ -73,6 +73,16 @@ namespace WpfApp1.FiguresOnCanvas
         public double Radius { get => radius; set => radius = value; }
 
         #endregion
+        public Figure()
+        {
+            dX = dY = random.NextDouble() * 3 - 1;
+            Velocity.X = (float)dX;
+            Velocity.Y = (float)dY;
+
+            FiguresRandomizer.FigureRandomizer.Hig_Wei_X_Y_pMax_Mar(ref height, ref width, ref x, ref y, pMax, MARGIN);
+
+            Collision += Repulsion;
+        }
 
         public event EventHandler<CollisionEventArgs> Collision;
 
@@ -101,19 +111,10 @@ namespace WpfApp1.FiguresOnCanvas
             OnCollision(e);
         }
 
-        public Figure()
-        { 
-            dX = random.NextDouble() * 5 - 2;
-            dY = random.NextDouble() * 5 - 2;
-            Velocity.X = (float)dX;
-            Velocity.Y = (float)dY;
-
-            FiguresRandomizer.FigureRandomizer.Hig_Wei_X_Y_pMax_Mar(ref height, ref width, ref x, ref y, pMax, MARGIN);
-
-            Collision += Repulsion;
-        }
+        
 
         public abstract bool IsCollide(Figure figure);
+        public abstract Point PointOfCollision(Figure figure);
         public virtual void Repulsion(object sender, CollisionEventArgs e)
         {
             #region Link on documentation
@@ -159,7 +160,8 @@ namespace WpfApp1.FiguresOnCanvas
 
         public virtual void Move()
         {
-            if (Y + Height > pMax.Y)
+            if (Y + Height > pMax.Y
+                || Y < 0)
             {
                 var ex = new FigureOutOfBoundExeption();
                 ex.dX = 0;
@@ -167,7 +169,8 @@ namespace WpfApp1.FiguresOnCanvas
                 throw ex;
             }
 
-            if (X + Width > pMax.X)
+            if (X + Width > pMax.X
+                    || X < 0)
             {
                 var ex = new FigureOutOfBoundExeption();
                 ex.dX =(float)(CurentWindowCurentXY.X - X - Width - MARGIN *2);
@@ -194,7 +197,7 @@ namespace WpfApp1.FiguresOnCanvas
                     Velocity.X = -Velocity.X;
                 }
 
-               
+
 
                 X += Velocity.X;
                 Y += Velocity.Y;
