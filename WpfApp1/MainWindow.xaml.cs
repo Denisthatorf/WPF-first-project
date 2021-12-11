@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Media;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -24,23 +25,13 @@ namespace WpfApp1
     /// </summary>
     public partial class MainWindow : Window
     {
-        List<Figure> FiguresOnCanvas;
-        MediaPlayer mplayer = new MediaPlayer();
-       // Thread SecondThread;
-              
-       
+        private List<Figure> FiguresOnCanvas;
+        private MediaPlayer mplayer = new MediaPlayer();
+        private BackgroundWorker DrowThead = new BackgroundWorker();
+
         public MainWindow()
         {
             InitializeComponent();
-
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromMilliseconds(10);
-            timer.Tick += timerRefresh;
-            timer.Start();
-
-          //  SecondThread = new Thread(DrowFigure);
-          //  SecondThread.Start();
-
 
             FiguresOnCanvas = new List<Figure>();
 
@@ -50,12 +41,23 @@ namespace WpfApp1
                 Y = Application.Current.MainWindow.Height
             };
 
+            #region Threads
+
+             DrowThead.DoWork += DrowFigure;
+             DrowThead.RunWorkerAsync();
+             DrowThead.WorkerSupportsCancellation = true;
+
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromMilliseconds(10);
+            timer.Tick += timerRefresh;
+            timer.Start();
+            #endregion
         }
 
 
+        #region Threads
         void timerRefresh(object sender, EventArgs e)
         {
-            DrowFigure();
             Figure.pMax = new Point()
             {
                 X = PbMain.ActualWidth,
@@ -77,23 +79,42 @@ namespace WpfApp1
                 }
                 catch (FigureOutOfBoundExeption ex)
                 {
-                    figure.Move(new System.Numerics.Vector2(ex.dX, ex.dY));                }
+                    figure.Move(new System.Numerics.Vector2(ex.dX, ex.dY));
+                }
                 PbMain.Items.Remove(figure);
             }
         }
-
-        void DrowFigure()
+        #region DrowFigureTread
+        void DrowFigure(object sender, EventArgs e)
         {
-            this.Dispatcher.Invoke(() =>
+            while (true)
             {
-                foreach (var figure in FiguresOnCanvas)
-                {
-                    PbMain.Items.Add(figure);
-                }
+                if (DrowThead.CancellationPending)
+                    break;
 
-            });
-            
+                if (FiguresOnCanvas.Count > 0)
+                {
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        foreach (var figure in FiguresOnCanvas)
+                        {
+                            if (!PbMain.Items.Contains(figure))
+                                PbMain.Items.Add(figure);
+                        }
+
+                    });
+                }
+            }
         }
+
+
+        private void WindowClosing(object sender, CancelEventArgs e)
+        {
+            DrowThead.CancelAsync();
+        }
+        #endregion
+
+        #endregion
 
 
         #region Btns that create figures
@@ -297,13 +318,7 @@ namespace WpfApp1
 
             text += $"({e.CollisionPoint.X:#.##};{e.CollisionPoint.Y:#.##})";
             ConsoleBox.Text = text;
-
-           
-
-
         }
-
-
 
         #endregion
 
