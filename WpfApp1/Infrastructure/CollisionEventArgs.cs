@@ -1,22 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows;
+using WpfApp1.FiguresOnCanvas;
 
 namespace WpfApp1.Infrastructure
 {
     public class CollisionEventArgs: EventArgs
     {
-        public Type Type1 { get; }
-        public Type Type2 { get; }
-
-        public CollisionEventArgs(Type type1, Type type2)
+        public Point CollisionPoint { get; }
+        public Figure figure { get; }
+        public CollisionEventArgs(Figure _figure, Point _collisionPoint)
         {
-            Type1 = type1;
-            Type2 = type2;
+            CollisionPoint = _collisionPoint;
+            figure = _figure;
         }
         public override string ToString()
         {
-            return base.ToString();
+            return figure.GetType().ToString();
         }
     }
 }

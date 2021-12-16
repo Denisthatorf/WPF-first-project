@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Numerics;
 using System.Runtime.Serialization;
+using System.Windows;
 using System.Windows.Shapes;
 
 namespace WpfApp1.FiguresOnCanvas
@@ -12,25 +14,16 @@ namespace WpfApp1.FiguresOnCanvas
         {
         }
 
-
-        public override void InitiolizeShape()
-        {
-             
-           /* Width= Height = random.NextDouble() * 20 + 10;
-
-            X = random.NextDouble() * (pMax.X - Width - MARGIN) + MARGIN;
-            Y = random.NextDouble() * (pMax.Y - Height - MARGIN) + MARGIN;*/
-
-            FiguresRandomizer.FigureRandomizer.Hig_Wei_X_Y_pMax_Mar(ref height, ref width, ref x, ref y, pMax, MARGIN);
-
-        }
-
         public override bool IsCollide(Figure figure)
         {
-            throw new NotImplementedException();
+            if (this.X + Width < figure.X || this.X > figure.X + Width) return false;
+            if (this.Y + Width < figure.Y || this.Y > figure.Y + Height) return false;
+            if (!(figure is RectangleOnCanvas) || figure == this || figure == null) return false;
+
+            return true;
         }
 
-        public override void OnCollision(ref Figure figure)
+        public override Point PointOfCollision(Figure figure)
         {
             throw new NotImplementedException();
         }

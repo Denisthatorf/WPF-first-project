@@ -7,7 +7,8 @@
          xmlns:int="clr-namespace:WpfApp1.Infrastructure"
         xmlns:figures="clr-namespace:WpfApp1.FiguresOnCanvas"
         mc:Ignorable="d" MinHeight="450" MinWidth="800"
-         Height="450" Width="800"
+         Height="450" Width="800" Closing="WindowClosing"
+        
         >
     <Window.Resources>
         <Style TargetType="Button">
@@ -25,7 +26,6 @@
     </Window.Resources>
 
     <Grid>
-
         <Border BorderBrush="Black" 
         BorderThickness="2" />
         <!-- Buttons-->
@@ -69,14 +69,14 @@
                         VerticalAlignment="Top" HorizontalAlignment="Right"
                         Margin="0 15 100 0">
 
-                <MenuItem Header="File">
-                    <MenuItem Header="Save">
+                <MenuItem Header="{DynamicResource File}">
+                    <MenuItem Header="{DynamicResource Save}">
                         <MenuItem Name="SaveBin" Header=".bin" Click="SaveBin_Click"/>
                         <MenuItem Name="SaveXml" Header=".xml" Click="SaveXml_Click"/>
                         <MenuItem Name="SaveJson" Header=".json" Click="SaveJson_Click"/>
                     </MenuItem>
 
-                    <MenuItem Name="Open_SavedFile" Header="Open" Click="Open_SavedFile_Click"/>
+                    <MenuItem Name="Open_SavedFile" Header="{DynamicResource Open}" Click="Open_SavedFile_Click"/>
                 </MenuItem>
             </Menu>
 
@@ -108,10 +108,10 @@
         BorderThickness="1" />
 
             <!-- <Canvas />-->
-            <ItemsControl x:Name="PbMain"  Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2"  Grid.RowSpan="2">
+            <ItemsControl x:Name="PbMain" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2"  Grid.RowSpan="2">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <Canvas/>
+                        <Canvas x:Name="Canvas" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemContainerStyle>
@@ -207,6 +207,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition></RowDefinition>
                     <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
@@ -216,20 +217,20 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBox Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" 
-                           TextAlignment="Center"
-                           Margin="10">Sound</TextBox>
-                <Button Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" 
+                           TextAlignment="Center" Text="{DynamicResource Sound}"
+                           Margin="10"></TextBox>
+                <Button Grid.Column="1" Grid.Row="0" 
                          Style="{StaticResource PlusMinusButton}" Click="PlusSound">
-                        <Image Source="Images\MinusSign.png"/>
+                        <Image Source="Images\PlusSign.png"/>
                 </Button>
-                <Button Grid.Column="2" Grid.Row="0" HorizontalAlignment="Right"
-                        Style="{StaticResource PlusMinusButton}" Click="MinusSound">
-                    <Image Source="Images\PlusSign.png"/>
+                <Button Grid.Column="2" Grid.Row="0" 
+                        Style="{StaticResource PlusMinusButton}" Click="MinusSound" >
+                    <Image Source="Images\MinusSign.png"></Image>
                 </Button>
-
                 
-                <TextBox Grid.Column="0" Grid.Row="1"
-                             Margin="10" TextAlignment="Center">On Console</TextBox>
+                
+                <TextBox Grid.Column="0" Grid.Row="1" Text="{DynamicResource Data}"
+                             Margin="10" TextAlignment="Center"></TextBox>
                 <Button Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" 
                          Style="{StaticResource PlusMinusButton}" Click="AddDataOnConsole">
                     <Image Source="Images\MinusSign.png"/>
@@ -238,6 +239,13 @@
                         Style="{StaticResource PlusMinusButton}" Click="RemoveDataFromConsole">
                     <Image Source="Images\PlusSign.png"/>
                 </Button>
+
+
+                <TextBox Grid.Row="2" Grid.ColumnSpan="4"
+                         x:Name="ConsoleBox" Height="100"
+                         BorderBrush="Black" BorderThickness="1"
+                         IsReadOnly="True"></TextBox>
+
 
             </Grid>
 

@@ -2,11 +2,19 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:system="clr-namespace:System;assembly=mscorlib">
 
+
     <system:String x:Key="Triangle">Triangle</system:String>
     <system:String x:Key="Rectangle">Rectangle</system:String>
     <system:String x:Key="Circle">Circle</system:String>
 
     <system:String x:Key="Stop">Stop</system:String>
     <system:String x:Key="Start">Start</system:String>
+
+    <system:String x:Key="File">File</system:String>
+    <system:String x:Key="Open">Open</system:String>
+    <system:String x:Key="Save">Save</system:String>
+
+    <system:String x:Key="Data">Data</system:String>
+    <system:String x:Key="Sound">Sound</system:String>
 
 </ResourceDictionary>
